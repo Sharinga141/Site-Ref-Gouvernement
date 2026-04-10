@@ -7,8 +7,94 @@
     <title>Dashboard</title>
     <!-- Logo -->
      <link rel="shortcut icon" href="./DOJ.png">
+     <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f1117; min-height: 100vh; font-family: 'Segoe UI', system-ui, sans-serif; color: #e2e0f0; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; padding: 0 28px; background: #16182a; border-bottom: 0.5px solid #2e2e4a; height: 72px; }
+    .topbar-left { display: flex; align-items: center; height: 100%; }
+    .brand { display: flex; align-items: center; gap: 12px; padding-right: 24px; border-right: 0.5px solid #2e2e4a; margin-right: 6px; height: 100%; }
+    .brand-logo { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: #26215C; display: flex; align-items: center; justify-content: center; }
+    .brand-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .brand-name { font-size: 14px; font-weight: 700; color: #e2e0f0; letter-spacing: 0.05em; white-space: nowrap; }
+    .nav { display: flex; align-items: center; height: 100%; }
+    .nav a { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0 18px; height: 100%; justify-content: center; text-decoration: none; color: #7c7c9a; font-size: 12px; font-weight: 500; border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap; }
+    .nav a:hover { color: #e2e0f0; background: #1e2035; }
+    .nav a.active { color: #EF9F27; border-bottom-color: #EF9F27; }
+    .nav a svg { width: 20px; height: 20px; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .theme-btn { background: #1e2035; border: none; border-radius: 9px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #7c7c9a; }
+    .theme-btn:hover { color: #e2e0f0; }
+    .user-chip { display: flex; align-items: center; gap: 10px; background: #1e2035; border-radius: 9px; padding: 6px 14px; }
+    .user-chip img { width: 28px; height: 28px; border-radius: 50%; display: none; }
+    .user-avatar-placeholder { width: 28px; height: 28px; border-radius: 50%; background: #26215C; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #AFA9EC; flex-shrink: 0; }
+    .user-name { font-size: 13px; font-weight: 500; color: #e2e0f0; }
+    .divider-v { width: 0.5px; height: 18px; background: #2e2e4a; }
+    .admin-badge { font-size: 11px; font-weight: 700; color: #5865F2; letter-spacing: 0.04em; }
+    .logout-btn { background: none; border: none; color: #E24B4A; cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 9px; }
+    .logout-btn:hover { background: #A32D2D1a; }
+    .content { padding: 28px; }
+    .page-header { margin-bottom: 24px; }
+    .page-header h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .page-header p { font-size: 13px; color: #7c7c9a; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin-bottom: 24px; }
+    .metric-card { background: #16182a; border: 0.5px solid #2e2e4a; border-radius: 12px; padding: 18px 20px; }
+    .metric-label { font-size: 12px; color: #7c7c9a; margin-bottom: 8px; }
+    .metric-value { font-size: 26px; font-weight: 600; }
+    .metric-sub { font-size: 11px; margin-top: 6px; }
+    .green { color: #5DCAA5; } .amber { color: #EF9F27; } .red { color: #E24B4A; } .blue { color: #5865F2; } .purple { color: #AFA9EC; }
+    .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .card { background: #16182a; border: 0.5px solid #2e2e4a; border-radius: 12px; padding: 20px; }
+    .card-title { font-size: 12px; font-weight: 500; color: #7c7c9a; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .project-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid #1e2035; }
+    .project-row:last-child { border-bottom: none; }
+    .project-name { flex: 1; font-size: 13px; }
+    .project-tag { font-size: 11px; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+    .tag-green { background: #0F6E561a; color: #5DCAA5; border: 0.5px solid #0F6E5640; }
+    .tag-amber { background: #854F0B1a; color: #EF9F27; border: 0.5px solid #854F0B40; }
+    .tag-red { background: #A32D2D1a; color: #E24B4A; border: 0.5px solid #A32D2D40; }
+    .tag-blue { background: #5865F21a; color: #5865F2; border: 0.5px solid #5865F240; }
+    .progress-wrap { width: 80px; }
+    .progress-bg { background: #1e2035; border-radius: 4px; height: 5px; }
+    .progress-fill { height: 5px; border-radius: 4px; }
+    .pct { font-size: 11px; color: #7c7c9a; width: 32px; text-align: right; }
+    .member-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid #1e2035; }
+    .member-row:last-child { border-bottom: none; }
+    .member-info { flex: 1; }
+    .member-name { font-size: 13px; font-weight: 500; }
+    .member-role { font-size: 11px; color: #7c7c9a; margin-top: 1px; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .task-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid #1e2035; }
+    .task-item:last-child { border-bottom: none; }
+    .task-check { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #3a3a5a; margin-top: 1px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .task-check.done { background: #1D9E75; border-color: #1D9E75; }
+    .task-check.done::after { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: #0f1117; }
+    .task-text { font-size: 13px; flex: 1; }
+    .task-text.done { color: #4a4a6a; text-decoration: line-through; }
+    .task-due { font-size: 11px; color: #7c7c9a; margin-top: 2px; }
+    .activity-item { display: flex; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid #1e2035; }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+    .activity-text { font-size: 13px; }
+    .activity-time { font-size: 11px; color: #7c7c9a; margin-top: 2px; }
+  </style>
 </head>
 <body>
-    
+<div class= "topbar">
+    <div class="topbar-left">
+    <div class="brand">
+        <img src=" alt="Logo"
+    </div>
+    <div class="brand-name"> Référencement Gouvernement</div>
+    </div>
+    <nav class="nav"
+    Dashboard
+</a>
+<a href="/dashboard.html" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+    Dashboard
+<a href="index.html" class="active"
+
+
 </body>
 </html>
